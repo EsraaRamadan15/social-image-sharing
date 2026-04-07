@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/BuildingBlocks/">
+    <Project Path="BuildingBlocks/Application/Application.csproj" Id="fbf8360b-93ee-4b96-a65d-d8773fcc63e2" />
+    <Project Path="BuildingBlocks/Domain/Domain.csproj" Id="0d82ace1-562c-4c0f-94fa-47efcb5a1408" />
+    <Project Path="BuildingBlocks/Infrastructure/Infrastructure.csproj" Id="50dc775d-e6bd-4878-8dd4-b0c99c2745b1" />
+  </Folder>
+  <Folder Name="/src/Modules/">
+    <Project Path="Modules/Identity/Identity.csproj" Id="ceb55400-226d-49dd-b7cf-b691be1ce02b" />
+    <Project Path="Modules/Posts/Posts.csproj" Id="f5e177ab-148b-4208-84ab-c68a14faf8d1" />
+    <Project Path="Modules/Profiles/Profiles.csproj" Id="61ed507d-6dbb-4776-9adc-53f01849b291" />
+  </Folder>
+  <Folder Name="/src/Presentation/">
+    <Project Path="Presentation/Api/Api.csproj" Id="1c4ebc1f-addb-43ab-be59-55ec5f9547f4" />
+  </Folder>
+</Solution>
