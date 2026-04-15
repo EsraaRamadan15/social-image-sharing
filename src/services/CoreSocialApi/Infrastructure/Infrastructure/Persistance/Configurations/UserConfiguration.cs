@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations
+namespace InfrastructureLibrary.Persistence.Configurations
 {
     public sealed class UserConfiguration : IEntityTypeConfiguration<User>
     {

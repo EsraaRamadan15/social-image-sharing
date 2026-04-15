@@ -1,12 +1,11 @@
 ﻿using Application.Abstractions;
-using Infrastructure.Persistence;
 using Infrastructure.Time;
+using InfrastructureLibrary.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-
-namespace Infrastructure
+namespace InfrastructureLibrary
 {
     public static class DependencyInjection
     {

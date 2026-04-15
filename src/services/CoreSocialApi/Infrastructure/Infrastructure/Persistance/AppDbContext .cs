@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Posts.Domain.Entities;
 using Profiles.Domain.Entities;
 
-namespace Infrastructure.Persistence
+namespace InfrastructureLibrary.Persistence
 {
 
     public sealed class AppDbContext : DbContext, IApplicationDbContext
