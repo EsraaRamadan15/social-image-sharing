@@ -1,4 +1,6 @@
-﻿namespace Profiles.Domain.Entities
+﻿using Domain.Common;
+
+namespace Profiles.Domain.Entities
 {
     public sealed class Profile : AuditableEntity<Guid>
     {

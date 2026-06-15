@@ -1,7 +1,7 @@
 ﻿using Application.Abstractions;
-using Identity.Application.Abstractions;
+using Identity.Application.Abstractions.Authentication;
+using Identity.Application.Settings;
 using Identity.Domain.Entities;
-using Infrastructure.Authentication;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Identity.Infrastructure.Authentication
+namespace SharedInfrastructure.Authentication
 {
     public sealed class TokenService : ITokenService
     {

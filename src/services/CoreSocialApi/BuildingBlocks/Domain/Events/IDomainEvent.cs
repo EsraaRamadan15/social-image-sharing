@@ -1,5 +1,7 @@
-﻿
-public interface IDomainEvent
+﻿namespace Domain.Events
 {
-    DateTimeOffset OccurredOnUtc { get; }
+    public interface IDomainEvent
+    {
+        DateTimeOffset OccurredOnUtc { get; }
+    }
 }

@@ -6,7 +6,7 @@
     <Project Path="BuildingBlocks/Infrastructure/Infrastructure.csproj" Id="50dc775d-e6bd-4878-8dd4-b0c99c2745b1" />
   </Folder>
   <Folder Name="/src/Infrastructure/">
-    <Project Path="Infrastructure/Infrastructure/InfrastructureLibrary.csproj" Id="dc22b73f-f4c3-49e6-9af6-86b5b7191154" />
+    <Project Path="Infrastructure/Infrastructure/SharedInfrastructure.csproj" Id="dc22b73f-f4c3-49e6-9af6-86b5b7191154" />
   </Folder>
   <Folder Name="/src/Modules/">
     <Project Path="Modules/Identity/Identity.csproj" Id="ceb55400-226d-49dd-b7cf-b691be1ce02b" />

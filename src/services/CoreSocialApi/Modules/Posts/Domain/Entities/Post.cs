@@ -1,4 +1,5 @@
-﻿using Posts.Domain.Enums;
+﻿using Domain.Common;
+using Posts.Domain.Enums;
 
 namespace Posts.Domain.Entities
 {

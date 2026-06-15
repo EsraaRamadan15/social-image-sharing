@@ -1,10 +1,11 @@
 ﻿using Application.Abstractions;
+using Domain.Common;
 using Identity.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Posts.Domain.Entities;
 using Profiles.Domain.Entities;
 
-namespace InfrastructureLibrary.Persistence
+namespace SharedInfrastructure.Persistence
 {
 
     public sealed class AppDbContext : DbContext, IApplicationDbContext

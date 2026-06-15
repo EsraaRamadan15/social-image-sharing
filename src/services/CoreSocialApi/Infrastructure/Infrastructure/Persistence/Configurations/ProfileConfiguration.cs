@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Profiles.Domain.Entities;
 
-namespace InfrastructureLibrary.Persistence.Configurations
+namespace SharedInfrastructure.Persistence.Configurations
 {
     public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {

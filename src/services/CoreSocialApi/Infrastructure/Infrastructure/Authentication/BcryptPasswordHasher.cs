@@ -1,6 +1,6 @@
-﻿using Application.Abstractions;
+﻿using Identity.Application.Abstractions.Authentication;
 
-namespace Identity.Infrastructure.Authentication
+namespace SharedInfrastructure.Authentication
 {
     public sealed class BcryptPasswordHasher : IPasswordHasher
     {

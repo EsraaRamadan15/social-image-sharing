@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InfrastructureLibrary.Persistence.Configurations
+namespace SharedInfrastructure.Persistence.Configurations
 {
 
     public sealed class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>

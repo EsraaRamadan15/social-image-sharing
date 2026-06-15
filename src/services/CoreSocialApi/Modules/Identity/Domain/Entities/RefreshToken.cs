@@ -1,4 +1,6 @@
-﻿namespace Identity.Domain.Entities
+﻿using Domain.Common;
+
+namespace Identity.Domain.Entities
 {
     public sealed class RefreshToken : AuditableEntity<Guid>
     {
