@@ -15,10 +15,10 @@ namespace SharedInfrastructure.Repositories.Identity
             _dbContext = dbContext;
         }
 
-        public async Task<RefreshToken?> GetByTokenAsync(string token, CancellationToken cancellationToken = default)
+        public async Task<RefreshToken?> GetByTokenHashAsync(string tokenHash, CancellationToken cancellationToken = default)
         {
             return await _dbContext.RefreshTokens
-                .FirstOrDefaultAsync(x => x.Token == token, cancellationToken);
+                .FirstOrDefaultAsync(x => x.TokenHash == tokenHash, cancellationToken);
         }
 
         public async Task AddAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)

@@ -9,7 +9,7 @@ namespace Identity.Domain.Entities
         }
 
         public Guid UserId { get; private set; }
-        public string Token { get; private set; } = string.Empty;
+        public string TokenHash { get; private set; } = string.Empty;
         public DateTimeOffset ExpiresAtUtc { get; private set; }
         public DateTimeOffset? RevokedAtUtc { get; private set; }
         public string? ReplacedByToken { get; private set; }
@@ -24,7 +24,7 @@ namespace Identity.Domain.Entities
         public static RefreshToken Create(
             Guid id,
             Guid userId,
-            string token,
+            string tokenHash,
             DateTimeOffset expiresAtUtc,
             DateTimeOffset createdAtUtc,
             string? createdByIp)
@@ -33,7 +33,7 @@ namespace Identity.Domain.Entities
             {
                 Id = id,
                 UserId = userId,
-                Token = token,
+                TokenHash = tokenHash,
                 ExpiresAtUtc = expiresAtUtc,
                 CreatedAtUtc = createdAtUtc,
                 CreatedByIp = createdByIp

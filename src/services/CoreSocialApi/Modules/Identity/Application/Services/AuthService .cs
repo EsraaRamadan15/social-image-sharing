@@ -20,6 +20,7 @@ namespace Identity.Application.Services
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IRefreshTokenHasher _refreshTokenHasher;
         private readonly ITokenService _tokenService;
         private readonly IApplicationDbContext _dbContext;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -30,6 +31,7 @@ namespace Identity.Application.Services
             IRefreshTokenRepository refreshTokenRepository,
             IProfileRepository profileRepository,
             IPasswordHasher passwordHasher,
+            IRefreshTokenHasher refreshTokenHasher,
             ITokenService tokenService,
             IApplicationDbContext dbContext,
             IDateTimeProvider dateTimeProvider,
@@ -39,6 +41,7 @@ namespace Identity.Application.Services
             _refreshTokenRepository = refreshTokenRepository;
             _profileRepository = profileRepository;
             _passwordHasher = passwordHasher;
+            _refreshTokenHasher = refreshTokenHasher;
             _tokenService = tokenService;
             _dbContext = dbContext;
             _dateTimeProvider = dateTimeProvider;
@@ -77,7 +80,7 @@ namespace Identity.Application.Services
             var refreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
-                refreshTokenValue,
+                _refreshTokenHasher.Hash(refreshTokenValue),
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
                 ipAddress);
@@ -113,7 +116,7 @@ namespace Identity.Application.Services
             var refreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
-                refreshTokenValue,
+                _refreshTokenHasher.Hash(refreshTokenValue),
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
                 ipAddress);
@@ -131,7 +134,8 @@ namespace Identity.Application.Services
 
         public async Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken, string? ipAddress, CancellationToken cancellationToken = default)
         {
-            var existingToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken, cancellationToken);
+            var refreshTokenHash = _refreshTokenHasher.Hash(refreshToken);
+            var existingToken = await _refreshTokenRepository.GetByTokenHashAsync(refreshTokenHash, cancellationToken);
             if (existingToken is null)
                 return Result<AuthResponse>.Failure(AuthErrors.InvalidRefreshToken);
 
@@ -148,13 +152,14 @@ namespace Identity.Application.Services
                 return Result<AuthResponse>.Failure(AuthErrors.InvalidRefreshToken);
 
             var newRefreshTokenValue = _tokenService.CreateRefreshToken();
+            var newRefreshTokenHash = _refreshTokenHasher.Hash(newRefreshTokenValue);
 
-            existingToken.Revoke(now, newRefreshTokenValue);
+            existingToken.Revoke(now, newRefreshTokenHash);
 
             var newRefreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
-                newRefreshTokenValue,
+                newRefreshTokenHash,
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
                 ipAddress);
@@ -172,7 +177,8 @@ namespace Identity.Application.Services
 
         public async Task<Result> LogoutAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
-            var existingToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken, cancellationToken);
+            var refreshTokenHash = _refreshTokenHasher.Hash(refreshToken);
+            var existingToken = await _refreshTokenRepository.GetByTokenHashAsync(refreshTokenHash, cancellationToken);
             if (existingToken is null)
                 return Result.Failure(AuthErrors.InvalidRefreshToken);
 

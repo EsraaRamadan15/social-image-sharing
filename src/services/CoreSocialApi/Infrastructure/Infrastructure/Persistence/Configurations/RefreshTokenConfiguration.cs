@@ -13,8 +13,9 @@ namespace SharedInfrastructure.Persistence.Configurations
 
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Token)
-                .IsRequired();
+            builder.Property(x => x.TokenHash)
+                .IsRequired()
+                .HasMaxLength(64);
 
             builder.Property(x => x.ExpiresAtUtc)
                 .IsRequired();
@@ -25,7 +26,7 @@ namespace SharedInfrastructure.Persistence.Configurations
             builder.Property(x => x.CreatedByIp)
                 .HasMaxLength(100);
 
-            builder.HasIndex(x => x.Token)
+            builder.HasIndex(x => x.TokenHash)
                 .IsUnique();
 
             builder.HasOne<User>()

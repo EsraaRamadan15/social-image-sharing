@@ -65,6 +65,7 @@ namespace SharedInfrastructure
                 ?? throw new InvalidOperationException($"Configuration section '{JwtOptions.SectionName}' was not found.");
 
             services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
+            services.AddSingleton<IRefreshTokenHasher, Sha256RefreshTokenHasher>();
             services.AddSingleton<ITokenService, TokenService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
