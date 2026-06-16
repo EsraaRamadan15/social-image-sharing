@@ -1,3 +1,4 @@
+using Api.Middleware;
 using FluentValidation;
 using Identity.Application.Abstractions;
 using Identity.Application.Services;
@@ -6,6 +7,9 @@ using SharedInfrastructure;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +32,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
