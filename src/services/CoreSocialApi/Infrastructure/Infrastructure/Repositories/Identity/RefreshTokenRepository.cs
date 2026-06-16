@@ -21,6 +21,13 @@ namespace SharedInfrastructure.Repositories.Identity
                 .FirstOrDefaultAsync(x => x.TokenHash == tokenHash, cancellationToken);
         }
 
+        public async Task<IReadOnlyList<RefreshToken>> ListActiveBySessionIdAsync(Guid sessionId, DateTimeOffset now, CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.RefreshTokens
+                .Where(x => x.SessionId == sessionId && !x.RevokedAtUtc.HasValue && x.ExpiresAtUtc > now)
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task AddAsync(RefreshToken refreshToken, CancellationToken cancellationToken = default)
         {
             await _dbContext.RefreshTokens.AddAsync(refreshToken, cancellationToken);

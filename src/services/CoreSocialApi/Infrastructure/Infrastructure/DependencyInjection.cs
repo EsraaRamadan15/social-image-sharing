@@ -69,6 +69,7 @@ namespace SharedInfrastructure
             services.AddSingleton<ITokenService, TokenService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserSessionRepository, UserSessionRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

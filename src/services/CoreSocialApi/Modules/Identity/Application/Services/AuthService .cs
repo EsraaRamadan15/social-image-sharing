@@ -17,6 +17,7 @@ namespace Identity.Application.Services
     public sealed class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserSessionRepository _userSessionRepository;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IProfileRepository _profileRepository;
         private readonly IPasswordHasher _passwordHasher;
@@ -28,6 +29,7 @@ namespace Identity.Application.Services
 
         public AuthService(
             IUserRepository userRepository,
+            IUserSessionRepository userSessionRepository,
             IRefreshTokenRepository refreshTokenRepository,
             IProfileRepository profileRepository,
             IPasswordHasher passwordHasher,
@@ -38,6 +40,7 @@ namespace Identity.Application.Services
             Microsoft.Extensions.Options.IOptions<JwtOptions> jwtOptions)
         {
             _userRepository = userRepository;
+            _userSessionRepository = userSessionRepository;
             _refreshTokenRepository = refreshTokenRepository;
             _profileRepository = profileRepository;
             _passwordHasher = passwordHasher;
@@ -48,7 +51,7 @@ namespace Identity.Application.Services
             _jwtOptions = jwtOptions.Value;
         }
 
-        public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request, string? ipAddress, CancellationToken cancellationToken = default)
+        public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request, string? ipAddress, string? userAgent, CancellationToken cancellationToken = default)
         {
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
             var normalizedUserName = request.UserName.Trim();
@@ -77,9 +80,18 @@ namespace Identity.Application.Services
                 now);
 
             var refreshTokenValue = _tokenService.CreateRefreshToken();
+            var session = UserSession.Create(
+                Guid.NewGuid(),
+                user.Id,
+                GetDeviceName(userAgent),
+                userAgent,
+                ipAddress,
+                now);
+
             var refreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
+                session.Id,
                 _refreshTokenHasher.Hash(refreshTokenValue),
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
@@ -87,19 +99,20 @@ namespace Identity.Application.Services
 
             await _userRepository.AddAsync(user, cancellationToken);
             await _profileRepository.AddAsync(profile, cancellationToken);
+            await _userSessionRepository.AddAsync(session, cancellationToken);
             await _refreshTokenRepository.AddAsync(refreshToken, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Result<AuthResponse>.Success(new AuthResponse
             {
-                AccessToken = _tokenService.CreateAccessToken(user),
+                AccessToken = _tokenService.CreateAccessToken(user, session.Id),
                 RefreshToken = refreshTokenValue,
                 ExpiresAtUtc = now.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes)
             });
         }
 
-        public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request, string? ipAddress, CancellationToken cancellationToken = default)
+        public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request, string? ipAddress, string? userAgent, CancellationToken cancellationToken = default)
         {
             var normalizedEmail = request.Email.Trim().ToLowerInvariant();
             var user = await _userRepository.GetByEmailAsync(normalizedEmail, cancellationToken);
@@ -112,21 +125,30 @@ namespace Identity.Application.Services
 
             var now = _dateTimeProvider.UtcNow;
             var refreshTokenValue = _tokenService.CreateRefreshToken();
+            var session = UserSession.Create(
+                Guid.NewGuid(),
+                user.Id,
+                GetDeviceName(userAgent),
+                userAgent,
+                ipAddress,
+                now);
 
             var refreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
+                session.Id,
                 _refreshTokenHasher.Hash(refreshTokenValue),
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
                 ipAddress);
 
+            await _userSessionRepository.AddAsync(session, cancellationToken);
             await _refreshTokenRepository.AddAsync(refreshToken, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Result<AuthResponse>.Success(new AuthResponse
             {
-                AccessToken = _tokenService.CreateAccessToken(user),
+                AccessToken = _tokenService.CreateAccessToken(user, session.Id),
                 RefreshToken = refreshTokenValue,
                 ExpiresAtUtc = now.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes)
             });
@@ -142,10 +164,22 @@ namespace Identity.Application.Services
             var now = _dateTimeProvider.UtcNow;
 
             if (existingToken.IsRevoked)
+            {
+                if (existingToken.ReplacedByToken is not null)
+                {
+                    await RevokeSessionInternalAsync(existingToken.SessionId, now, cancellationToken);
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+
                 return Result<AuthResponse>.Failure(AuthErrors.InvalidRefreshToken);
+            }
 
             if (existingToken.IsExpiredAt(now))
                 return Result<AuthResponse>.Failure(AuthErrors.ExpiredRefreshToken);
+
+            var session = await _userSessionRepository.GetByIdAsync(existingToken.SessionId, cancellationToken);
+            if (session is null || session.IsRevoked)
+                return Result<AuthResponse>.Failure(AuthErrors.InvalidRefreshToken);
 
             var user = await _userRepository.GetByIdAsync(existingToken.UserId, cancellationToken);
             if (user is null || !user.IsActive)
@@ -159,17 +193,20 @@ namespace Identity.Application.Services
             var newRefreshToken = RefreshToken.Create(
                 Guid.NewGuid(),
                 user.Id,
+                existingToken.SessionId,
                 newRefreshTokenHash,
                 now.AddDays(_jwtOptions.RefreshTokenExpirationDays),
                 now,
                 ipAddress);
+
+            session.MarkSeen(now, ipAddress);
 
             await _refreshTokenRepository.AddAsync(newRefreshToken, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Result<AuthResponse>.Success(new AuthResponse
             {
-                AccessToken = _tokenService.CreateAccessToken(user),
+                AccessToken = _tokenService.CreateAccessToken(user, existingToken.SessionId),
                 RefreshToken = newRefreshTokenValue,
                 ExpiresAtUtc = now.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes)
             });
@@ -184,11 +221,82 @@ namespace Identity.Application.Services
 
             if (!existingToken.IsRevoked)
             {
-                existingToken.Revoke(_dateTimeProvider.UtcNow);
+                var now = _dateTimeProvider.UtcNow;
+                existingToken.Revoke(now);
+                var session = await _userSessionRepository.GetByIdAsync(existingToken.SessionId, cancellationToken);
+                session?.Revoke(now);
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
 
             return Result.Success();
+        }
+
+        public async Task<Result<IReadOnlyList<UserSessionResponse>>> ListSessionsAsync(Guid userId, Guid? currentSessionId, CancellationToken cancellationToken = default)
+        {
+            var sessions = await _userSessionRepository.ListByUserIdAsync(userId, cancellationToken);
+
+            var response = sessions
+                .Select(x => new UserSessionResponse
+                {
+                    Id = x.Id,
+                    DeviceName = x.DeviceName,
+                    UserAgent = x.UserAgent,
+                    CreatedByIp = x.CreatedByIp,
+                    LastSeenIp = x.LastSeenIp,
+                    CreatedAtUtc = x.CreatedAtUtc,
+                    LastSeenAtUtc = x.LastSeenAtUtc,
+                    IsCurrent = currentSessionId == x.Id
+                })
+                .ToList();
+
+            return Result<IReadOnlyList<UserSessionResponse>>.Success(response);
+        }
+
+        public async Task<Result> RevokeSessionAsync(Guid userId, Guid sessionId, CancellationToken cancellationToken = default)
+        {
+            var session = await _userSessionRepository.GetByIdForUserAsync(sessionId, userId, cancellationToken);
+            if (session is null)
+                return Result.Failure(AuthErrors.InvalidSession);
+
+            if (!session.IsRevoked)
+            {
+                await RevokeSessionInternalAsync(session.Id, _dateTimeProvider.UtcNow, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            return Result.Success();
+        }
+
+        private async Task RevokeSessionInternalAsync(Guid sessionId, DateTimeOffset now, CancellationToken cancellationToken)
+        {
+            var session = await _userSessionRepository.GetByIdAsync(sessionId, cancellationToken);
+            session?.Revoke(now);
+
+            var activeTokens = await _refreshTokenRepository.ListActiveBySessionIdAsync(sessionId, now, cancellationToken);
+            foreach (var activeToken in activeTokens)
+            {
+                activeToken.Revoke(now);
+            }
+        }
+
+        private static string GetDeviceName(string? userAgent)
+        {
+            if (string.IsNullOrWhiteSpace(userAgent))
+                return "Unknown device";
+
+            if (userAgent.Contains("Mobile", StringComparison.OrdinalIgnoreCase))
+                return "Mobile device";
+
+            if (userAgent.Contains("Windows", StringComparison.OrdinalIgnoreCase))
+                return "Windows device";
+
+            if (userAgent.Contains("Mac", StringComparison.OrdinalIgnoreCase))
+                return "Mac device";
+
+            if (userAgent.Contains("Linux", StringComparison.OrdinalIgnoreCase))
+                return "Linux device";
+
+            return "Unknown device";
         }
     }
 }

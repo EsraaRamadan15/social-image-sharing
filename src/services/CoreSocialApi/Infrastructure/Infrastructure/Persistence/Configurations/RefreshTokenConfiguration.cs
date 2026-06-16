@@ -29,9 +29,16 @@ namespace SharedInfrastructure.Persistence.Configurations
             builder.HasIndex(x => x.TokenHash)
                 .IsUnique();
 
+            builder.HasIndex(x => x.SessionId);
+
             builder.HasOne<User>()
                 .WithMany()
                 .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne<UserSession>()
+                .WithMany()
+                .HasForeignKey(x => x.SessionId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

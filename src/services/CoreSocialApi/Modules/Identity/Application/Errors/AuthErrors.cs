@@ -22,5 +22,8 @@ namespace Identity.Application.Errors
 
         public static readonly Error ExpiredRefreshToken =
             new("auth.expired_refresh_token", "The refresh token has expired.");
+
+        public static readonly Error InvalidSession =
+            new("auth.invalid_session", "The session is invalid.");
     }
 }

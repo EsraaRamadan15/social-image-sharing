@@ -9,6 +9,7 @@ namespace Identity.Domain.Entities
         }
 
         public Guid UserId { get; private set; }
+        public Guid SessionId { get; private set; }
         public string TokenHash { get; private set; } = string.Empty;
         public DateTimeOffset ExpiresAtUtc { get; private set; }
         public DateTimeOffset? RevokedAtUtc { get; private set; }
@@ -24,6 +25,7 @@ namespace Identity.Domain.Entities
         public static RefreshToken Create(
             Guid id,
             Guid userId,
+            Guid sessionId,
             string tokenHash,
             DateTimeOffset expiresAtUtc,
             DateTimeOffset createdAtUtc,
@@ -33,6 +35,7 @@ namespace Identity.Domain.Entities
             {
                 Id = id,
                 UserId = userId,
+                SessionId = sessionId,
                 TokenHash = tokenHash,
                 ExpiresAtUtc = expiresAtUtc,
                 CreatedAtUtc = createdAtUtc,

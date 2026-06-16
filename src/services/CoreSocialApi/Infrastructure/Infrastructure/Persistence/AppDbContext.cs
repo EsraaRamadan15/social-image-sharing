@@ -20,6 +20,7 @@ namespace SharedInfrastructure.Persistence
         }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<UserSession> UserSessions => Set<UserSession>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<Profile> Profiles => Set<Profile>();
         public DbSet<Post> Posts => Set<Post>();

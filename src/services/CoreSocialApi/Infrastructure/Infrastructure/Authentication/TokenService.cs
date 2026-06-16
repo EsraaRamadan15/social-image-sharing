@@ -22,13 +22,15 @@ namespace SharedInfrastructure.Authentication
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public string CreateAccessToken(User user)
+        public string CreateAccessToken(User user, Guid sessionId)
         {
             var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email),
             new(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            new("sid", sessionId.ToString()),
+            new(ClaimTypes.Sid, sessionId.ToString()),
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new(ClaimTypes.Name, user.UserName),
             new(ClaimTypes.Role, user.Role.ToString())
