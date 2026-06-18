@@ -6,12 +6,24 @@ using Identity.Application.Validators;
 using SharedInfrastructure;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
+const string AllowAnyWebsiteCorsPolicy = "AllowAnyWebsite";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(AllowAnyWebsiteCorsPolicy, policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -35,6 +47,8 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+
+app.UseCors(AllowAnyWebsiteCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

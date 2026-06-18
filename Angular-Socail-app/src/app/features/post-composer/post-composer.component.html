@@ -1,0 +1,37 @@
+<section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+  <div class="flex items-center justify-between gap-3">
+    <div>
+      <h2 class="text-lg font-bold text-slate-950">Create post</h2>
+      <p class="text-sm text-slate-500">Uploads the image first, then creates the post through backend services.</p>
+    </div>
+    @if (store.busyMessage(); as busy) {
+      <span class="rounded-md bg-sky-50 px-2 py-1 text-xs font-bold text-sky-700">{{ busy }}</span>
+    }
+  </div>
+
+  <div class="mt-4 grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
+    <label class="group block cursor-pointer overflow-hidden rounded-lg border border-dashed border-slate-300 bg-slate-50">
+      <img class="aspect-square w-full object-cover transition group-hover:scale-[1.02]" [src]="previewUrl" alt="Selected post preview" />
+      <input class="sr-only" type="file" accept="image/*" (change)="selectFile($event)" />
+      <span class="block px-3 py-2 text-center text-sm font-semibold text-slate-600">Choose image</span>
+    </label>
+
+    <form class="flex min-h-56 flex-col gap-3" (ngSubmit)="publish()">
+      <textarea
+        class="min-h-32 flex-1 resize-none rounded-md border border-slate-300 p-3 text-sm leading-6 outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20"
+        name="caption"
+        placeholder="Write a caption..."
+        [(ngModel)]="caption"
+      ></textarea>
+
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-xs text-slate-500">
+          Backend flow: image upload service, then posts service.
+        </p>
+        <button class="min-h-11 rounded-md bg-coral px-5 text-sm font-bold text-white transition hover:bg-slate-950" type="submit">
+          Publish
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

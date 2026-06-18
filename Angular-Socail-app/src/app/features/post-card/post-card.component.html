@@ -1,0 +1,47 @@
+@let item = post();
+
+<article class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+  <div class="flex items-center justify-between gap-3 p-4">
+    <div class="flex min-w-0 items-center gap-3">
+      <img class="h-11 w-11 rounded-full object-cover" [src]="item.avatarUrl" [alt]="item.author + ' avatar'" />
+      <div class="min-w-0">
+        <h3 class="truncate font-bold text-slate-950">{{ item.author }}</h3>
+        <p class="text-sm text-slate-500">{{ item.handle }} · {{ item.createdAt }}</p>
+      </div>
+    </div>
+
+    <button class="rounded-md border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-500 transition hover:border-coral hover:text-coral" type="button" (click)="deletePost()">
+      Delete
+    </button>
+  </div>
+
+  <img class="aspect-[5/4] w-full object-cover" [src]="item.imageUrl" [alt]="item.caption" />
+
+  <div class="space-y-4 p-4">
+    <p class="text-sm leading-6 text-slate-700">{{ item.caption }}</p>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        class="min-h-10 rounded-md border px-4 text-sm font-bold transition"
+        [ngClass]="item.liked ? 'border-coral bg-rose-50 text-coral' : 'border-slate-300 text-slate-700 hover:border-coral hover:text-coral'"
+        type="button"
+        (click)="toggleLike()"
+      >
+        {{ item.liked ? 'Liked' : 'Like' }} · {{ item.likes }}
+      </button>
+      <span class="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600">{{ item.comments }} comments</span>
+    </div>
+
+    <form class="flex gap-2" (ngSubmit)="submitComment()">
+      <input
+        class="min-h-10 flex-1 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20"
+        name="comment"
+        placeholder="Add a comment"
+        [(ngModel)]="comment"
+      />
+      <button class="min-h-10 rounded-md bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-ocean" type="submit">
+        Send
+      </button>
+    </form>
+  </div>
+</article>

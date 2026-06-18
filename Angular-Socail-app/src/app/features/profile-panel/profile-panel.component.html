@@ -1,0 +1,42 @@
+@let user = store.currentUser();
+@let stats = store.stats();
+
+<section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+  <div class="flex items-center gap-3">
+    <img class="h-16 w-16 rounded-full object-cover" [src]="user.avatarUrl" alt="Current user avatar" />
+    <div class="min-w-0">
+      <h2 class="truncate font-bold text-slate-950">{{ user.displayName }}</h2>
+      <p class="text-sm text-slate-500">{{ user.handle }}</p>
+    </div>
+  </div>
+
+  <dl class="mt-4 grid grid-cols-3 gap-2 text-center">
+    <div class="rounded-lg bg-slate-50 p-3">
+      <dt class="text-xs text-slate-500">Posts</dt>
+      <dd class="font-bold text-slate-950">{{ user.posts }}</dd>
+    </div>
+    <div class="rounded-lg bg-slate-50 p-3">
+      <dt class="text-xs text-slate-500">Followers</dt>
+      <dd class="font-bold text-slate-950">{{ user.followers }}</dd>
+    </div>
+    <div class="rounded-lg bg-slate-50 p-3">
+      <dt class="text-xs text-slate-500">Following</dt>
+      <dd class="font-bold text-slate-950">{{ user.following }}</dd>
+    </div>
+  </dl>
+
+  <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+    <p class="rounded-md bg-rose-50 px-2 py-2 font-semibold text-coral">{{ stats.likes }} likes</p>
+    <p class="rounded-md bg-blue-50 px-2 py-2 font-semibold text-skyline">{{ stats.comments }} comments</p>
+    <p class="rounded-md bg-amber-50 px-2 py-2 font-semibold text-sun">{{ stats.unread }} unread</p>
+  </div>
+
+  <div class="mt-4 grid gap-2">
+    <button class="min-h-10 w-full rounded-md border border-slate-300 text-sm font-semibold text-slate-700 transition hover:border-ocean hover:text-ocean" type="button" (click)="refreshProfile()">
+      Refresh profile
+    </button>
+    <button class="min-h-10 w-full rounded-md bg-slate-950 text-sm font-semibold text-white transition hover:bg-coral" type="button" (click)="logout()">
+      Logout and revoke token
+    </button>
+  </div>
+</section>
