@@ -1,7 +1,9 @@
 ﻿using Application.Abstractions;
 using Identity.Application.Abstractions.Authentication;
+using Identity.Application.Authorization;
 using Identity.Application.Settings;
 using Identity.Domain.Entities;
+using Identity.Domain.Enums;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -35,6 +37,13 @@ namespace SharedInfrastructure.Authentication
             new(ClaimTypes.Name, user.UserName),
             new(ClaimTypes.Role, user.Role.ToString())
         };
+
+            if (user.Role == UserRole.Admin)
+            {
+                claims.Add(new Claim("permission", Permissions.PostsDeleteAny));
+                claims.Add(new Claim("permission", Permissions.UsersDisable));
+                claims.Add(new Claim("permission", Permissions.ModerationReview));
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

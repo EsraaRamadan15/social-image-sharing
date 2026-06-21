@@ -27,7 +27,8 @@ namespace SharedInfrastructure
             services
                 .AddPersistence(configuration)
                 .AddIdentityInfrastructure(configuration).
-                AddProfileInfrastructure(configuration);
+                AddProfileInfrastructure(configuration)
+                .AddPostsInfrastructure(configuration);
 
 
             return services;
@@ -101,5 +102,17 @@ namespace SharedInfrastructure
 
             return services;
         }
+
+
+        private static IServiceCollection AddPostsInfrastructure(
+          this IServiceCollection services,
+          IConfiguration configuration)
+        {
+
+            return services;
+        }
+
+
+
     }
 }
