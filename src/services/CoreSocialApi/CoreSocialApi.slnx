@@ -10,6 +10,7 @@
   </Folder>
   <Folder Name="/src/Modules/">
     <Project Path="Modules/Identity/Identity.csproj" Id="ceb55400-226d-49dd-b7cf-b691be1ce02b" />
+    <Project Path="Modules/MediaService/MediaService.csproj" Id="e2a450eb-d69e-4ca7-981d-04c11d0c271e" />
     <Project Path="Modules/Posts/Posts.csproj" Id="f5e177ab-148b-4208-84ab-c68a14faf8d1" />
     <Project Path="Modules/Profiles/Profiles.csproj" Id="61ed507d-6dbb-4776-9adc-53f01849b291" />
   </Folder>
