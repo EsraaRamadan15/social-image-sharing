@@ -18,6 +18,7 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(RegisterRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.RegisterAsync(request, GetIpAddress(), GetUserAgent(), cancellationToken);
@@ -29,6 +30,7 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.LoginAsync(request, GetIpAddress(), GetUserAgent(), cancellationToken);
@@ -40,6 +42,7 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("refresh")]
+    [AllowAnonymous]
     public async Task<IActionResult> Refresh(RefreshTokenRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.RefreshTokenAsync(request.RefreshToken, GetIpAddress(), cancellationToken);
@@ -51,6 +54,7 @@ public sealed class AuthController : ControllerBase
     }
 
     [HttpPost("logout")]
+    [AllowAnonymous]
     public async Task<IActionResult> Logout(RefreshTokenRequest request, CancellationToken cancellationToken)
     {
         var result = await _authService.LogoutAsync(request.RefreshToken, cancellationToken);

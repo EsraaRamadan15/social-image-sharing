@@ -1,11 +1,7 @@
 using Api.Middleware;
-using FluentValidation;
-using Identity.Application.Abstractions;
-using Identity.Application.Authorization;
-using Identity.Application.Services;
-using Identity.Application.Validators;
-using Microsoft.AspNetCore.Authorization;
-using Posts.Application.Authorization;
+using Identity.Infrastructure;
+using Posts.Infrastructure;
+using Profiles.Infrastructure;
 using SharedInfrastructure;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
@@ -27,28 +23,17 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(Policies.AdminOnly, policy =>
-        policy.RequireRole("Admin"));
-
-    options.AddPolicy(Policies.CanDeleteAnyPost, policy =>
-        policy.RequireClaim("permission", Permissions.PostsDeleteAny));
-
-    options.AddPolicy(Policies.CanModerate, policy =>
-        policy.RequireClaim("permission", Permissions.ModerationReview));
-});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services
+    .AddInfrastructure(builder.Configuration)
+    .AddIdentityInfrastructure(builder.Configuration)
+    .AddProfilesInfrastructure(builder.Configuration)
+    .AddPostsInfrastructure(builder.Configuration);
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
-
-builder.Services.AddScoped<IAuthorizationHandler, PostOwnerOrAdminHandler>();
 
 var app = builder.Build();
 
