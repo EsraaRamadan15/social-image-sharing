@@ -1,0 +1,17 @@
+﻿namespace MediaService.Application.Options
+{
+
+    public sealed class MediaUploadOptions
+    {
+        public const string SectionName = "MediaUpload";
+
+        public long MaxFileSizeInBytes { get; init; } = 5 * 1024 * 1024;
+
+        public string[] AllowedContentTypes { get; init; } =
+        [
+            "image/jpeg",
+        "image/png",
+        "image/webp"
+        ];
+    }
+}

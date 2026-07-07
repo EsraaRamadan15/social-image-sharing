@@ -1,5 +1,7 @@
 using Api.Middleware;
 using Identity.Infrastructure;
+using MediaService.Infrastructure;
+using Microsoft.Extensions.FileProviders;
 using Posts.Infrastructure;
 using Profiles.Infrastructure;
 using SharedInfrastructure;
@@ -7,7 +9,17 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 const string AllowAnyWebsiteCorsPolicy = "AllowAnyWebsite";
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+var uploadsPath = ResolveLocalStorageRootPath(
+    builder.Configuration["LocalStorage:RootPath"],
+    builder.Environment.ContentRootPath);
+
+if (!Directory.Exists(uploadsPath))
+{
+    Directory.CreateDirectory(uploadsPath);
+}
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -31,7 +43,8 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddIdentityInfrastructure(builder.Configuration)
     .AddProfilesInfrastructure(builder.Configuration)
-    .AddPostsInfrastructure(builder.Configuration);
+    .AddPostsInfrastructure(builder.Configuration)
+    .AddMediaInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -53,6 +66,24 @@ app.UseCors(AllowAnyWebsiteCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 app.MapControllers();
 
 app.Run();
+
+static string ResolveLocalStorageRootPath(string? rootPath, string contentRootPath)
+{
+    var configuredRootPath = string.IsNullOrWhiteSpace(rootPath)
+        ? "Uploads"
+        : rootPath;
+
+    return Path.IsPathRooted(configuredRootPath)
+        ? Path.GetFullPath(configuredRootPath)
+        : Path.GetFullPath(Path.Combine(contentRootPath, configuredRootPath));
+}

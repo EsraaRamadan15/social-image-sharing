@@ -17,13 +17,16 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.23.0" />
     <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Application\Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Infrastructure\SharedInfrastructure.csproj" />
     <ProjectReference Include="..\..\Modules\Identity\Identity.csproj" />
+    <ProjectReference Include="..\..\Modules\MediaService\MediaService.csproj" />
+    <ProjectReference Include="..\..\Modules\Posts\Posts.csproj" />
+    <ProjectReference Include="..\..\Modules\Profiles\Profiles.csproj" />
   </ItemGroup>
 
 </Project>
