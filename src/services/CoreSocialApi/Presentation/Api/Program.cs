@@ -2,6 +2,7 @@ using Api.Middleware;
 using Identity.Infrastructure;
 using MediaService.Infrastructure;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi;
 using Posts.Infrastructure;
 using Profiles.Infrastructure;
 using SharedInfrastructure;
@@ -36,7 +37,26 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your JWT access token."
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecuritySchemeReference("Bearer", document),
+            []
+        }
+    });
+});
 builder.Services.AddHttpContextAccessor();
 
 builder.Services

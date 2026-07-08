@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Posts.Domain.Entities;
 
-namespace Posts.Infrastructure.Persistence.Configurations
+namespace Posts.Infrastructure.Configurations
 {
     public sealed class PostConfiguration : IEntityTypeConfiguration<Post>
     {

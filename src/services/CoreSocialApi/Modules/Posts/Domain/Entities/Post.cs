@@ -37,7 +37,7 @@ namespace Posts.Domain.Entities
             };
         }
 
-        public void UpdateCaption(string? caption, PostVisibility visibility, DateTimeOffset updatedAtUtc)
+        public void Update(string? caption, PostVisibility visibility, DateTimeOffset updatedAtUtc)
         {
             Caption = caption;
             Visibility = visibility;

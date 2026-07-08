@@ -10,6 +10,7 @@ namespace Posts.Application
         {
             services.AddScoped<IAuthorizationHandler, PostOwnerOrAdminHandler>();
 
+
             return services;
         }
     }
