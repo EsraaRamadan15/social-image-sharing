@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { SuggestedUser } from '../../core/social-api.models';
-import { SocialAppStore } from '../../core/social-app.store';
+import { SuggestedUser } from '../../core/models/social-api.models';
+import { SocialAppStore } from '../../core/store/social-app.store';
 
 @Component({
   selector: 'app-people-panel',

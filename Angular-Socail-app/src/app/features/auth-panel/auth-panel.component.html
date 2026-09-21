@@ -26,21 +26,25 @@
       </label>
       <label class="block text-sm font-semibold text-slate-700">
         User name
-        <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" name="userName" [(ngModel)]="userName" />
+        <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" name="userName" [(ngModel)]="userName" required />
       </label>
     }
 
     <label class="block text-sm font-semibold text-slate-700">
       Email
-      <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" type="email" name="email" [(ngModel)]="email" />
+      <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" type="email" name="email" [(ngModel)]="email" required />
     </label>
 
     <label class="block text-sm font-semibold text-slate-700">
       Password
-      <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" type="password" name="password" [(ngModel)]="password" />
+      <input class="mt-1 min-h-10 w-full rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-ocean focus:ring-2 focus:ring-ocean/20" type="password" name="password" [(ngModel)]="password" required />
     </label>
 
-    <button class="min-h-11 w-full rounded-md bg-ocean px-4 text-sm font-bold text-white transition hover:bg-slate-950" type="submit">
+    <button
+      class="min-h-11 w-full rounded-md bg-ocean px-4 text-sm font-bold text-white transition hover:bg-slate-950 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
+      type="submit"
+      [disabled]="store.busyMessage() !== null"
+    >
       {{ mode === 'login' ? 'Sign in with API' : 'Create account with API' }}
     </button>
   </form>

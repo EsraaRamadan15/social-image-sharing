@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
-import { SocialAppStore } from '../../core/social-app.store';
+import { SocialAppStore } from '../../core/store/social-app.store';
 
 @Component({
   selector: 'app-profile-panel',
@@ -8,12 +9,14 @@ import { SocialAppStore } from '../../core/social-app.store';
 })
 export class ProfilePanelComponent {
   readonly store = inject(SocialAppStore);
+  private readonly router = inject(Router);
 
   refreshProfile(): void {
     void this.store.loadCurrentUser();
   }
 
-  logout(): void {
-    void this.store.logout();
+  async logout(): Promise<void> {
+    await this.store.logout();
+    await this.router.navigateByUrl('/auth');
   }
 }

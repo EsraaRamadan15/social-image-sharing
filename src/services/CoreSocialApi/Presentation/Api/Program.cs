@@ -1,11 +1,13 @@
 using Api.Middleware;
 using Identity.Infrastructure;
 using MediaService.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi;
 using Posts.Infrastructure;
 using Profiles.Infrastructure;
 using SharedInfrastructure;
+using SharedInfrastructure.Persistence;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 const string AllowAnyWebsiteCorsPolicy = "AllowAnyWebsite";
@@ -72,6 +74,10 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }

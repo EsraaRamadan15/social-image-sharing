@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
-import { SocialAppStore } from '../../core/social-app.store';
+import { SocialAppStore } from '../../core/store/social-app.store';
 
 @Component({
   selector: 'app-notifications-panel',

@@ -3,10 +3,16 @@
 <article class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
   <div class="flex items-center justify-between gap-3 p-4">
     <div class="flex min-w-0 items-center gap-3">
-      <img class="h-11 w-11 rounded-full object-cover" [src]="item.avatarUrl" [alt]="item.author + ' avatar'" />
+      @if (item.avatarUrl) {
+        <img class="h-11 w-11 rounded-full object-cover" [src]="item.avatarUrl" [alt]="item.author + ' avatar'" />
+      } @else {
+        <span class="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-xs font-bold uppercase text-slate-500">
+          User
+        </span>
+      }
       <div class="min-w-0">
         <h3 class="truncate font-bold text-slate-950">{{ item.author }}</h3>
-        <p class="text-sm text-slate-500">{{ item.handle }} · {{ item.createdAt }}</p>
+        <p class="text-sm text-slate-500">{{ item.handle }} - {{ item.createdAt }}</p>
       </div>
     </div>
 
@@ -15,7 +21,13 @@
     </button>
   </div>
 
-  <img class="aspect-[5/4] w-full object-cover" [src]="item.imageUrl" [alt]="item.caption" />
+  @if (item.imageUrl) {
+    <img class="aspect-[5/4] w-full object-cover" [src]="item.imageUrl" [alt]="item.caption" />
+  } @else {
+    <div class="flex aspect-[5/4] w-full items-center justify-center bg-slate-100 text-sm font-semibold text-slate-500">
+      Media not available
+    </div>
+  }
 
   <div class="space-y-4 p-4">
     <p class="text-sm leading-6 text-slate-700">{{ item.caption }}</p>
@@ -27,7 +39,7 @@
         type="button"
         (click)="toggleLike()"
       >
-        {{ item.liked ? 'Liked' : 'Like' }} · {{ item.likes }}
+        {{ item.liked ? 'Liked' : 'Like' }} - {{ item.likes }}
       </button>
       <span class="rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600">{{ item.comments }} comments</span>
     </div>

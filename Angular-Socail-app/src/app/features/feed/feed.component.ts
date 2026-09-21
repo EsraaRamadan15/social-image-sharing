@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import { SocialAppStore } from '../../core/social-app.store';
+import { SocialAppStore } from '../../core/store/social-app.store';
 import { PostCardComponent } from '../post-card/post-card.component';
 
 @Component({

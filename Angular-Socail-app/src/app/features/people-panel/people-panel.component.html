@@ -16,7 +16,13 @@
     @for (person of store.people(); track person.id) {
       <article class="rounded-lg border border-slate-200 p-3">
         <div class="flex items-start gap-3">
-          <img class="h-10 w-10 rounded-full object-cover" [src]="person.avatarUrl" [alt]="person.displayName + ' avatar'" />
+          @if (person.avatarUrl) {
+            <img class="h-10 w-10 rounded-full object-cover" [src]="person.avatarUrl" [alt]="person.displayName + ' avatar'" />
+          } @else {
+            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xs font-bold uppercase text-slate-500">
+              User
+            </span>
+          }
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-bold text-slate-950">{{ person.displayName }}</p>
             <p class="text-xs text-slate-500">{{ person.handle }}</p>

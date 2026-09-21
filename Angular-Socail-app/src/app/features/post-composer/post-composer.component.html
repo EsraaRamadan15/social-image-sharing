@@ -2,7 +2,7 @@
   <div class="flex items-center justify-between gap-3">
     <div>
       <h2 class="text-lg font-bold text-slate-950">Create post</h2>
-      <p class="text-sm text-slate-500">Uploads the image first, then creates the post through backend services.</p>
+      <p class="text-sm text-slate-500">Choose a JPEG, PNG, or WebP photo.</p>
     </div>
     @if (store.busyMessage(); as busy) {
       <span class="rounded-md bg-sky-50 px-2 py-1 text-xs font-bold text-sky-700">{{ busy }}</span>
@@ -11,7 +11,13 @@
 
   <div class="mt-4 grid gap-4 md:grid-cols-[13rem_minmax(0,1fr)]">
     <label class="group block cursor-pointer overflow-hidden rounded-lg border border-dashed border-slate-300 bg-slate-50">
-      <img class="aspect-square w-full object-cover transition group-hover:scale-[1.02]" [src]="previewUrl" alt="Selected post preview" />
+      @if (previewUrl) {
+        <img class="aspect-square w-full object-cover transition group-hover:scale-[1.02]" [src]="previewUrl" alt="Selected post preview" />
+      } @else {
+        <span class="flex aspect-square w-full items-center justify-center bg-slate-100 px-4 text-center text-sm font-semibold text-slate-500">
+          No image selected
+        </span>
+      }
       <input class="sr-only" type="file" accept="image/*" (change)="selectFile($event)" />
       <span class="block px-3 py-2 text-center text-sm font-semibold text-slate-600">Choose image</span>
     </label>
@@ -26,9 +32,13 @@
 
       <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-xs text-slate-500">
-          Backend flow: image upload service, then posts service.
+          Photo required before publishing.
         </p>
-        <button class="min-h-11 rounded-md bg-coral px-5 text-sm font-bold text-white transition hover:bg-slate-950" type="submit">
+        <button
+          class="min-h-11 rounded-md bg-coral px-5 text-sm font-bold text-white transition hover:bg-slate-950 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
+          type="submit"
+          [disabled]="!selectedFile || store.busyMessage() !== null"
+        >
           Publish
         </button>
       </div>

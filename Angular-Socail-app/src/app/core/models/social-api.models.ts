@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
 
+export type EntityId = string | number;
+
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export type ApiArea =
@@ -29,7 +31,7 @@ export interface SocialApiFunction {
 }
 
 export interface DemoUser {
-  id: number;
+  id: EntityId;
   displayName: string;
   handle: string;
   avatarUrl: string;
@@ -44,7 +46,7 @@ export interface SuggestedUser extends DemoUser {
 }
 
 export interface DemoPost {
-  id: number;
+  id: EntityId;
   author: string;
   handle: string;
   avatarUrl: string;
@@ -57,10 +59,18 @@ export interface DemoPost {
 }
 
 export interface DemoNotification {
-  id: number;
+  id: EntityId;
   title: string;
   body: string;
   unread: boolean;
+}
+
+export interface SystemActivity {
+  id: EntityId;
+  title: string;
+  detail: string;
+  level: 'info' | 'success' | 'warning' | 'error';
+  createdAt: string;
 }
 
 export interface DemoRun {
@@ -107,10 +117,55 @@ export interface ProfileUpdateRequest {
   website?: string;
 }
 
+export const POST_VISIBILITY = {
+  public: 1,
+  followersOnly: 2,
+  private: 3,
+} as const;
+
+export type PostVisibility = (typeof POST_VISIBILITY)[keyof typeof POST_VISIBILITY];
+
 export interface PostCreateRequest {
-  caption: string;
-  imageId: number;
-  visibility: 'public' | 'followers';
+  caption?: string;
+  mediaId: string;
+  visibility: PostVisibility;
+}
+
+export interface BackendPostResponse {
+  postId: string;
+  userId?: string;
+  mediaId: string;
+  caption?: string | null;
+  visibility?: PostVisibility;
+  likeCount?: number;
+  commentCount?: number;
+  createdAtUtc?: string;
+}
+
+export interface BackendPostsResponse {
+  items: BackendPostResponse[];
+}
+
+export interface CreateUploadSessionResponse {
+  mediaId: string;
+  status: number;
+}
+
+export interface UploadContentResponse {
+  mediaId: string;
+  publicUrl: string;
+  status: number;
+}
+
+export interface MediaResponse {
+  mediaId: string;
+  originalFileName?: string | null;
+  publicUrl?: string | null;
+  contentType?: string | null;
+  fileSizeInBytes?: number | null;
+  mediaType: number;
+  status: number;
+  createdAtUtc: string;
 }
 
 export interface CommentCreateRequest {

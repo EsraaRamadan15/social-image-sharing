@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { SocialAppStore } from '../../core/social-app.store';
+import { SocialAppStore } from '../../core/store/social-app.store';
 
 @Component({
   selector: 'app-post-composer',
@@ -11,9 +11,9 @@ import { SocialAppStore } from '../../core/social-app.store';
 export class PostComposerComponent {
   readonly store = inject(SocialAppStore);
 
-  caption = 'Evening colors from the bridge.';
+  caption = '';
   selectedFile?: File;
-  previewUrl = 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80';
+  previewUrl = '';
 
   selectFile(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -28,8 +28,14 @@ export class PostComposerComponent {
   }
 
   publish(): void {
+    if (!this.selectedFile) {
+      void this.store.createPost(this.caption);
+      return;
+    }
+
     void this.store.createPost(this.caption, this.selectedFile);
     this.caption = '';
     this.selectedFile = undefined;
+    this.previewUrl = '';
   }
 }

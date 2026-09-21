@@ -2,8 +2,8 @@ import { NgClass } from '@angular/common';
 import { Component, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { DemoPost } from '../../core/social-api.models';
-import { SocialAppStore } from '../../core/social-app.store';
+import { DemoPost } from '../../core/models/social-api.models';
+import { SocialAppStore } from '../../core/store/social-app.store';
 
 @Component({
   selector: 'app-post-card',
