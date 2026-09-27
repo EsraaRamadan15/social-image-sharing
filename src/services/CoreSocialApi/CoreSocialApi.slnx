@@ -8,11 +8,26 @@
   <Folder Name="/src/Infrastructure/">
     <Project Path="Infrastructure/Infrastructure/SharedInfrastructure.csproj" Id="dc22b73f-f4c3-49e6-9af6-86b5b7191154" />
   </Folder>
-  <Folder Name="/src/Modules/">
-    <Project Path="Modules/Identity/Identity.csproj" Id="ceb55400-226d-49dd-b7cf-b691be1ce02b" />
-    <Project Path="Modules/MediaService/MediaService.csproj" Id="e2a450eb-d69e-4ca7-981d-04c11d0c271e" />
-    <Project Path="Modules/Posts/Posts.csproj" Id="f5e177ab-148b-4208-84ab-c68a14faf8d1" />
-    <Project Path="Modules/Profiles/Profiles.csproj" Id="61ed507d-6dbb-4776-9adc-53f01849b291" />
+  <Folder Name="/src/Modules/Identity/">
+    <Project Path="Modules/Identity/Modules.Identity.Domain/Modules.Identity.Domain.csproj" Id="ceb55400-226d-49dd-b7cf-b691be1ce02b" />
+    <Project Path="Modules/Identity/Modules.Identity.Application/Modules.Identity.Application.csproj" Id="8c1cd937-b47a-42f8-9a53-5fef64180417" />
+    <Project Path="Modules/Identity/Modules.Identity.Infrastructure/Modules.Identity.Infrastructure.csproj" Id="e6f1c655-c9c4-4c61-9062-450873bb0893" />
+  </Folder>
+  <Folder Name="/src/Modules/Media/">
+    <Project Path="Modules/Media/Modules.Media.Contracts/Modules.Media.Contracts.csproj" Id="b214bbff-123d-4c6e-8a6a-ae6bb75f5150" />
+    <Project Path="Modules/Media/Modules.Media.Domain/Modules.Media.Domain.csproj" Id="7d2ea28a-533e-4f94-9d77-476b8c9b1a4e" />
+    <Project Path="Modules/Media/Modules.Media.Application/Modules.Media.Application.csproj" Id="9d7fdc2e-5922-4a58-aec4-aa3db356273a" />
+    <Project Path="Modules/Media/Modules.Media.Infrastructure/Modules.Media.Infrastructure.csproj" Id="c6e3e685-daf0-45e6-99c5-4838642f7b0a" />
+  </Folder>
+  <Folder Name="/src/Modules/Posts/">
+    <Project Path="Modules/Posts/Modules.Posts.Domain/Modules.Posts.Domain.csproj" Id="0c1d77e5-856e-4ad7-b4c0-56d99404f73d" />
+    <Project Path="Modules/Posts/Modules.Posts.Application/Modules.Posts.Application.csproj" Id="5c0ad70c-8d22-48f4-99ed-95d4b336ee20" />
+    <Project Path="Modules/Posts/Modules.Posts.Infrastructure/Modules.Posts.Infrastructure.csproj" Id="c13aa68f-3305-450e-a206-9e261d868518" />
+  </Folder>
+  <Folder Name="/src/Modules/Profiles/">
+    <Project Path="Modules/Profiles/Modules.Profiles.Domain/Modules.Profiles.Domain.csproj" Id="61ed507d-6dbb-4776-9adc-53f01849b291" />
+    <Project Path="Modules/Profiles/Modules.Profiles.Application/Modules.Profiles.Application.csproj" Id="e156690d-7e64-4ab1-af8f-db550c0597ac" />
+    <Project Path="Modules/Profiles/Modules.Profiles.Infrastructure/Modules.Profiles.Infrastructure.csproj" Id="bb0a5c25-6799-4f78-a758-62a9ada22550" />
   </Folder>
   <Folder Name="/src/Presentation/">
     <Project Path="Presentation/Api/Api.csproj" Id="1c4ebc1f-addb-43ab-be59-55ec5f9547f4" />

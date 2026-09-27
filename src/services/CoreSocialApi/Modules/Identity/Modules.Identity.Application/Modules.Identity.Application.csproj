@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Identity.Application</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Application\Application.csproj" />
+    <ProjectReference Include="..\..\Profiles\Modules.Profiles.Application\Modules.Profiles.Application.csproj" />
+    <ProjectReference Include="..\..\Profiles\Modules.Profiles.Domain\Modules.Profiles.Domain.csproj" />
+    <ProjectReference Include="..\Modules.Identity.Domain\Modules.Identity.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

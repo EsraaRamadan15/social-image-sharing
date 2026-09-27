@@ -4,10 +4,12 @@ using MediaService.Application.Features.DeleteMedia;
 using MediaService.Application.Features.GetMedia;
 using MediaService.Application.Features.UploadContent;
 using MediaService.Application.Options;
+using MediaService.Contracts.Posts;
 using MediaService.Infrastructure.Persistence.Repositories;
 using MediaService.Infrastructure.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Modules.Media.Application.Posts;
 using SharedInfrastructure.Persistence;
 
 namespace MediaService.Infrastructure
@@ -42,7 +44,7 @@ namespace MediaService.Infrastructure
             services.AddScoped<IUploadContentHandler, UploadContentHandler>();
             services.AddScoped<IGetMediaHandler, GetMediaHandler>();
             services.AddScoped<IDeleteMediaHandler, DeleteMediaHandler>();
-
+            services.AddScoped<IMediaPostAccessService, MediaPostAccessService>();
             return services;
         }
 

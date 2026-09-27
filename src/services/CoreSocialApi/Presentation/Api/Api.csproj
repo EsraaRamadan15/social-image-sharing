@@ -23,10 +23,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Application\Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Infrastructure\SharedInfrastructure.csproj" />
-    <ProjectReference Include="..\..\Modules\Identity\Identity.csproj" />
-    <ProjectReference Include="..\..\Modules\MediaService\MediaService.csproj" />
-    <ProjectReference Include="..\..\Modules\Posts\Posts.csproj" />
-    <ProjectReference Include="..\..\Modules\Profiles\Profiles.csproj" />
+    <ProjectReference Include="..\..\Modules\Identity\Modules.Identity.Application\Modules.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Identity\Modules.Identity.Infrastructure\Modules.Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Media\Modules.Media.Application\Modules.Media.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Media\Modules.Media.Infrastructure\Modules.Media.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Posts\Modules.Posts.Application\Modules.Posts.Application.csproj" />
+    <ProjectReference Include="..\..\Modules\Posts\Modules.Posts.Infrastructure\Modules.Posts.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Modules\Profiles\Modules.Profiles.Infrastructure\Modules.Profiles.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

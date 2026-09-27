@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Profiles.Infrastructure</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure\SharedInfrastructure.csproj" />
+    <ProjectReference Include="..\Modules.Profiles.Application\Modules.Profiles.Application.csproj" />
+    <ProjectReference Include="..\Modules.Profiles.Domain\Modules.Profiles.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
