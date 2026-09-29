@@ -5,13 +5,16 @@
       <h1 class="text-2xl font-bold text-slate-950">Core-connected Angular app</h1>
     </div>
 
-    <div class="grid gap-2 sm:grid-cols-[minmax(16rem,26rem)_auto_auto] sm:items-center">
-      <input
-        class="min-h-11 rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition focus:border-ocean focus:ring-2 focus:ring-ocean/20"
-        [value]="store.apiBaseUrl()"
-        (input)="updateBaseUrl($event)"
-        aria-label="Backend API base URL"
-      />
+    <div class="grid gap-2 sm:grid-cols-[minmax(16rem,26rem)_auto_auto] sm:items-end">
+      <label class="block">
+        <span class="text-xs font-bold uppercase text-slate-500">API URL</span>
+        <input
+          class="mt-1 min-h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition focus:border-ocean focus:ring-2 focus:ring-ocean/20"
+          [value]="store.apiBaseUrl()"
+          (input)="updateBaseUrl($event)"
+          aria-label="Backend API base URL"
+        />
+      </label>
 
       <span class="rounded-md border px-3 py-2 text-center text-xs font-bold" [ngClass]="statusClass()">
         {{ store.status() }}

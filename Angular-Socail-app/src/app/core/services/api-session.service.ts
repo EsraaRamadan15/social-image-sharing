@@ -17,9 +17,10 @@ export class ApiSessionService {
   readonly storedRefreshToken = this.refreshToken.asReadonly();
 
   setBaseUrl(value: string): void {
-    const next = value.trim();
+    const next = this.normalizeBaseUrl(value);
+
     if (next) {
-      this.baseUrl.set(next.replace(/\/$/, ''));
+      this.baseUrl.set(next);
     }
   }
 
@@ -32,14 +33,34 @@ export class ApiSessionService {
       return undefined;
     }
 
-    if (/^https?:\/\//i.test(publicUrl)) {
-      return publicUrl;
+    const cleanedUrl = publicUrl.trim().replace(/\\/g, '/');
+    const uploadsPath = this.extractUploadsPath(cleanedUrl);
+
+    if (uploadsPath) {
+      return `${this.apiRootFromBaseUrl(this.baseUrl())}${uploadsPath}`;
     }
 
-    const apiRoot = this.baseUrl().replace(/\/api$/, '');
-    const normalizedPath = publicUrl.startsWith('/') ? publicUrl : `/${publicUrl}`;
+    if (/^https?:\/\//i.test(cleanedUrl)) {
+      return cleanedUrl;
+    }
 
-    return `${apiRoot}${normalizedPath}`;
+    const normalizedPath = cleanedUrl.startsWith('/') ? cleanedUrl : `/${cleanedUrl}`;
+
+    return `${this.apiRootFromBaseUrl(this.baseUrl())}${normalizedPath}`;
+  }
+
+  private apiRootFromBaseUrl(baseUrl: string): string {
+    return baseUrl.replace(/\/api$/, '');
+  }
+
+  private normalizeBaseUrl(value: string): string {
+    return value.trim().replace(/\/$/, '');
+  }
+
+  private extractUploadsPath(value: string): string | undefined {
+    const match = value.match(/(?:^|\/)uploads\/(.+)$/i);
+
+    return match ? `/uploads/${match[1]}` : undefined;
   }
 
   authOptions(): { headers?: HttpHeaders } {

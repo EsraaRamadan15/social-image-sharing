@@ -131,10 +131,17 @@ export interface PostCreateRequest {
   visibility: PostVisibility;
 }
 
+export interface BackendPostMediaResponse {
+  mediaId: string;
+  url: string;
+  contentType: string;
+}
+
 export interface BackendPostResponse {
   postId: string;
   userId?: string;
-  mediaId: string;
+  mediaId?: string;
+  media?: BackendPostMediaResponse | null;
   caption?: string | null;
   visibility?: PostVisibility;
   likeCount?: number;

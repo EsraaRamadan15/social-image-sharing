@@ -89,16 +89,15 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseCors(AllowAnyWebsiteCorsPolicy);
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-
-
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
     RequestPath = "/uploads"
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

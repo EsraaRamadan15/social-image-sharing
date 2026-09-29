@@ -36,12 +36,11 @@ namespace MediaService.Infrastructure.Storage
             await using var outputStream = File.Create(storagePath);
             await fileStream.CopyToAsync(outputStream, cancellationToken);
 
-            var relativePath = storagePath
-                .Replace(_options.RootPath, string.Empty)
-                .Replace("\\", "/")
-                .TrimStart('/');
+            var relativePath = Path.GetRelativePath(_options.RootPath, storagePath)
+                .Replace(Path.DirectorySeparatorChar, '/')
+                .Replace(Path.AltDirectorySeparatorChar, '/');
 
-            var publicUrl = $"{_options.PublicBaseUrl}/{relativePath}";
+            var publicUrl = $"{NormalizePublicBaseUrl(_options.PublicBaseUrl)}/{relativePath}";
 
             var fileInfo = new FileInfo(storagePath);
 
@@ -62,6 +61,20 @@ namespace MediaService.Infrastructure.Storage
             }
 
             return Task.CompletedTask;
+        }
+
+        private static string NormalizePublicBaseUrl(string publicBaseUrl)
+        {
+            var trimmed = string.IsNullOrWhiteSpace(publicBaseUrl)
+                ? "/uploads"
+                : publicBaseUrl.Trim();
+
+            if (Uri.TryCreate(trimmed, UriKind.Absolute, out _))
+            {
+                return trimmed.TrimEnd('/');
+            }
+
+            return $"/{trimmed.Trim('/')}";
         }
     }
 }

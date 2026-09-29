@@ -377,6 +377,16 @@ export class SocialAppStore {
   }
 
   private async resolvePostImageUrl(post: BackendPostResponse): Promise<string | undefined> {
+    const mediaUrl = this.mediaApi.publicAssetUrl(post.media?.url);
+
+    if (mediaUrl) {
+      return mediaUrl;
+    }
+
+    if (!post.mediaId) {
+      return undefined;
+    }
+
     try {
       const media = await firstValueFrom(this.mediaApi.getMedia(post.mediaId));
       return this.mediaApi.publicAssetUrl(media.publicUrl);
