@@ -7,5 +7,8 @@ namespace MediaService.Application.Abstractions
         Task<MediaAsset?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
         Task AddAsync(MediaAsset mediaAsset, CancellationToken cancellationToken = default);
+        Task<List<MediaAsset>> GetByIdsAsync(
+    IReadOnlyCollection<Guid> ids,
+    CancellationToken cancellationToken = default);
     }
 }

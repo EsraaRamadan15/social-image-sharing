@@ -1,4 +1,4 @@
-﻿using Posts.Application.Features.GetPost;
+﻿using Posts.Application.Features.GetPost.Models;
 
 namespace Posts.Application.Features.GetUserPosts
 {

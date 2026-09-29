@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Posts.Application.Features.GetPost.Models;
 
 namespace Posts.Application.Features.GetPost
 {

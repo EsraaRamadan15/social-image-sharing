@@ -1,12 +1,12 @@
 ﻿using Posts.Domain.Enums;
 
-namespace Posts.Application.Features.GetPost
+namespace Posts.Application.Features.GetPost.Models
 {
     public sealed class GetPostResponse
     {
         public Guid PostId { get; init; }
         public Guid UserId { get; init; }
-        public Guid MediaId { get; init; }
+        public PostMediaResponse? Media { get; init; }
         public string? Caption { get; init; }
         public PostVisibility Visibility { get; init; }
         public int LikeCount { get; init; }

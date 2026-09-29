@@ -4,6 +4,7 @@ using MediaService.Application.Features.DeleteMedia;
 using MediaService.Application.Features.GetMedia;
 using MediaService.Application.Features.UploadContent;
 using MediaService.Application.Options;
+using MediaService.Application.Posts;
 using MediaService.Contracts.Posts;
 using MediaService.Infrastructure.Persistence.Repositories;
 using MediaService.Infrastructure.Storage;
@@ -45,6 +46,7 @@ namespace MediaService.Infrastructure
             services.AddScoped<IGetMediaHandler, GetMediaHandler>();
             services.AddScoped<IDeleteMediaHandler, DeleteMediaHandler>();
             services.AddScoped<IMediaPostAccessService, MediaPostAccessService>();
+            services.AddScoped<IMediaPostQueryService, MediaPostQueryService>();
             return services;
         }
 

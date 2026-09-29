@@ -29,5 +29,15 @@ namespace MediaService.Infrastructure.Persistence.Repositories
             await _dbContext.Set<MediaAsset>()
                 .AddAsync(mediaAsset, cancellationToken);
         }
+
+
+        public async Task<List<MediaAsset>> GetByIdsAsync(
+    IReadOnlyCollection<Guid> ids,
+    CancellationToken cancellationToken = default)
+        {
+            return await _dbContext.Set<MediaAsset>()
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync(cancellationToken);
+        }
     }
 }
