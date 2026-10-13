@@ -1,5 +1,6 @@
 ﻿using Domain.Common;
 using Identity.Domain.Enums;
+using Identity.Domain.Events;
 
 namespace Identity.Domain.Entities
 {
@@ -15,23 +16,28 @@ namespace Identity.Domain.Entities
         public bool IsActive { get; private set; }
 
         public static User Create(
-            Guid id,
-            string userName,
-            string email,
-            string passwordHash,
-            UserRole role,
-            DateTimeOffset createdAtUtc)
+          Guid id,
+          string username,
+          string email,
+          string passwordHash,
+          DateTimeOffset createdAtUtc)
         {
-            return new User
+            var user = new User
             {
                 Id = id,
-                UserName = userName,
+                UserName = username,
                 Email = email,
                 PasswordHash = passwordHash,
-                Role = role,
-                IsActive = true,
                 CreatedAtUtc = createdAtUtc
             };
+
+            user.RaiseDomainEvent(
+                new UserRegisteredDomainEvent(
+                    user.Id,
+                    user.UserName,
+                    createdAtUtc));
+
+            return user;
         }
 
         public void Deactivate(DateTimeOffset updatedAtUtc)

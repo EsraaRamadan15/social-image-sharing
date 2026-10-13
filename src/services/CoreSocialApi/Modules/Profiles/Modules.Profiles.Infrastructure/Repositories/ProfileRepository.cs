@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Profiles.Application.Abstractions;
 using Profiles.Domain.Entities;
 using SharedInfrastructure.Persistence;
@@ -13,9 +14,32 @@ namespace Profiles.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task AddAsync(Profile profile, CancellationToken cancellationToken = default)
+        public Task<Profile?> GetByIdAsync(
+     Guid id,
+     CancellationToken cancellationToken = default)
         {
-            await _dbContext.Set<Profile>().AddAsync(profile, cancellationToken);
+            return _dbContext.Set<Profile>()
+                .FirstOrDefaultAsync(
+                    x => x.Id == id,
+                    cancellationToken);
+        }
+
+        public Task<Profile?> GetByUserIdAsync(
+            Guid userId,
+            CancellationToken cancellationToken = default)
+        {
+            return _dbContext.Set<Profile>()
+                .FirstOrDefaultAsync(
+                    x => x.UserId == userId,
+                    cancellationToken);
+        }
+
+        public async Task AddAsync(
+            Profile profile,
+            CancellationToken cancellationToken = default)
+        {
+            await _dbContext.Set<Profile>()
+                .AddAsync(profile, cancellationToken);
         }
     }
 }

@@ -31,17 +31,18 @@ namespace Profiles.Domain.Entities
         }
 
         public void Update(
-            string displayName,
-            string? bio,
-            string? avatarUrl,
-            bool isPrivate,
-            DateTimeOffset updatedAtUtc)
+     string displayName,
+     string? bio,
+     DateTimeOffset updatedAtUtc)
         {
-            DisplayName = displayName;
-            Bio = bio;
-            AvatarUrl = avatarUrl;
-            IsPrivate = isPrivate;
+            DisplayName = displayName.Trim();
+            Bio = string.IsNullOrWhiteSpace(bio)
+                ? null
+                : bio.Trim();
+
             UpdatedAtUtc = updatedAtUtc;
         }
+
+
     }
 }
